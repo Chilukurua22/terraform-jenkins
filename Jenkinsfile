@@ -1,8 +1,5 @@
 pipeline {
 
-    parameters {
-        booleanParam(name: 'autoApprove', defaultValue: false, description: 'Automatically run apply after generating plan?')
-    } 
     environment {
         AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
@@ -43,11 +40,12 @@ pipeline {
                }
            }
        }
-
-        stage('Apply') {
+        
+        stage ("terraform Action") {
             steps {
-                sh "pwd;cd terraform/ ; terraform apply -input=false tfplan"
-            }
+                echo "Terraform action is --> ${action}"
+                sh ('terraform ${action} --auto-approve') 
+           }
         }
     }
 
